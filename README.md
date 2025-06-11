@@ -1,5 +1,7 @@
 A collection of utility functions for working with `lxml` and XPath.
 
+Supports Python 2+.
+
 ## Functions
 
 *   `inner_text(element: ElementBase) -> str`: Extracts the combined text content of an element and its descendants, like accessing JavaScript's innerText attribute.
@@ -11,6 +13,8 @@ A collection of utility functions for working with `lxml` and XPath.
 Here's a brief example of how to use the functions:
 
 ```python
+from __future__ import print_function
+
 from lxml import etree
 
 from lxml_xpath_utils import inner_text, find_deepest_elements_containing_target_text, get_xpath
@@ -38,14 +42,14 @@ root = etree.fromstring(html, parser)
 
 matching_elements = find_deepest_elements_containing_target_text(root, target_text)
 
-print(f"Elements containing '{target_text}':")
+print("Elements containing '%s':" % target_text)
 for elem in matching_elements:
     absolute_xpath = get_xpath(elem)
     print(absolute_xpath)
     assert elem == root.xpath(absolute_xpath)[0]
-    print(f"  Text: {inner_text(elem)}\n")
+    print("  Text: %s\n" % inner_text(elem))
 
-print(f"Elements containing '{target_text}' in /html/body/div[@id='main']:")
+print("Elements containing '%s' in /html/body/div[@id='main']:" % target_text)
 new_root = root.xpath('/html/body/div[@id="main"]')[0]
 new_matching_elements = find_deepest_elements_containing_target_text(new_root, target_text)
 
@@ -53,7 +57,7 @@ for new_elem in new_matching_elements:
     relative_xpath = get_xpath(new_elem, new_root)
     print(relative_xpath)
     assert new_elem == new_root.xpath(relative_xpath)[0]
-    print(f"  Text: {inner_text(new_elem)}\n")
+    print("  Text: %s\n" % inner_text(new_elem))
 ```
 
 Output:
